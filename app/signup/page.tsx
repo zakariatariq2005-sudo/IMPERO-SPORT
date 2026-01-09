@@ -32,9 +32,18 @@ export default function SignupPage() {
 
     try {
       // Create the user account with email and password
+      const emailRedirectTo = typeof window !== 'undefined' 
+        ? `${window.location.origin}/dashboard`
+        : undefined;
+      
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
+        ...(emailRedirectTo && {
+          options: {
+            emailRedirectTo,
+          },
+        }),
       });
 
       if (signUpError) {
@@ -49,26 +58,56 @@ export default function SignupPage() {
         return;
       }
 
-      // Create the player profile in our database
-      const { error: profileError } = await supabase
-        .from('players')
-        .insert({
-          user_id: authData.user.id,
-          name: formData.name,
-          skill_level: formData.skillLevel,
-          location: formData.location,
-          is_online: true,
-        });
+      // Check if email confirmation is required
+      // If session exists, user is automatically logged in (email confirmation disabled)
+      // If no session, email confirmation is required
+      if (authData.session) {
+        // User is automatically logged in (email confirmation disabled)
+        // Create the player profile in our database
+        const { error: profileError } = await supabase
+          .from('players')
+          .insert({
+            user_id: authData.user.id,
+            name: formData.name,
+            skill_level: formData.skillLevel,
+            location: formData.location,
+            is_online: true,
+          });
 
-      if (profileError) {
-        setError('Account created but failed to create profile. Please try logging in.');
+        if (profileError) {
+          setError('Account created but failed to create profile. Please try logging in.');
+          setLoading(false);
+          return;
+        }
+
+        // Redirect to dashboard on success
+        router.push('/dashboard');
+        router.refresh();
+      } else {
+        // Email confirmation is required
+        // Create player profile using a database function or wait for confirmation
+        // For now, we'll create it anyway - it will be created when they confirm email
+        const { error: profileError } = await supabase
+          .from('players')
+          .insert({
+            user_id: authData.user.id,
+            name: formData.name,
+            skill_level: formData.skillLevel,
+            location: formData.location,
+            is_online: false, // Set to false until they confirm and log in
+          });
+
+        if (profileError) {
+          // If profile creation fails, still show success message for signup
+          // The profile can be created on first login
+          console.error('Profile creation error:', profileError);
+        }
+
+        setError(null);
         setLoading(false);
-        return;
+        alert('Account created! Please check your email to confirm your account, then log in.');
+        router.push('/login');
       }
-
-      // Redirect to dashboard on success
-      router.push('/dashboard');
-      router.refresh();
     } catch (err) {
       setError('An unexpected error occurred');
       setLoading(false);
@@ -80,7 +119,7 @@ export default function SignupPage() {
       <div className="w-full max-w-md">
         <div className="bg-neutral rounded-lg shadow-xl p-8">
           <h1 className="text-3xl font-heading font-bold text-primary mb-2 text-center">
-            Impero Sport
+            Padel Connect
           </h1>
           <p className="text-gray-600 text-center mb-8">Create your account to start playing</p>
 

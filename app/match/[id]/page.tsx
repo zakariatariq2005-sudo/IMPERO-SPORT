@@ -50,7 +50,7 @@ export default async function LiveMatchPage({ params }: { params: { id: string }
       {/* Header */}
       <header className="bg-neutral border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <h1 className="text-2xl font-heading font-bold text-primary">Impero Sport - Live Match</h1>
+          <h1 className="text-2xl font-heading font-bold text-primary">Padel Connect - Live Match</h1>
         </div>
       </header>
 

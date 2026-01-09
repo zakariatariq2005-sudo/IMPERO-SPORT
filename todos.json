@@ -1,0 +1,15 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "text": "Buy milk",
+      "completed": true
+    },
+    {
+      "id": 2,
+      "text": "Test persistence",
+      "completed": false
+    }
+  ],
+  "nextId": 3
+}

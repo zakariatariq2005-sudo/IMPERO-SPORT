@@ -40,7 +40,7 @@ export default async function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-heading font-bold text-primary">Impero Sport</h1>
+              <h1 className="text-2xl font-heading font-bold text-primary">Padel Connect</h1>
               <p className="text-sm text-gray-600">Welcome, {profile?.name || 'Player'}!</p>
             </div>
             <LogoutButton />
@@ -55,7 +55,7 @@ export default async function DashboardPage() {
             Online Players
           </h2>
           <p className="text-gray-400">
-            Find players to match with and start playing clay tennis!
+            Find players to match with and start playing padel!
           </p>
         </div>
 

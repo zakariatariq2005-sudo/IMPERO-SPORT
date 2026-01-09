@@ -1,6 +1,6 @@
-# Impero Sport
+# Padel Connect
 
-A responsive Next.js web application for connecting clay tennis players and organizing matches in real-time.
+A responsive Next.js web application for connecting padel players and organizing matches in real-time.
 
 ## Features
 

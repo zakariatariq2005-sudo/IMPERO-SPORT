@@ -37,13 +37,39 @@ export default function LoginPage() {
         return;
       }
 
-      // Update player online status
+      // Get user and ensure player profile exists
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        await supabase
+        // Check if player profile exists
+        const { data: existingProfile } = await supabase
           .from('players')
-          .update({ is_online: true })
-          .eq('user_id', user.id);
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+
+        if (!existingProfile) {
+          // Profile doesn't exist, create it
+          const { error: profileError } = await supabase
+            .from('players')
+            .insert({
+              user_id: user.id,
+              name: user.email?.split('@')[0] || 'Player',
+              skill_level: 'Beginner',
+              location: 'Unknown',
+              is_online: true,
+            });
+
+          if (profileError) {
+            console.error('Failed to create player profile:', profileError);
+            // Continue anyway - profile can be created later
+          }
+        } else {
+          // Update player online status
+          await supabase
+            .from('players')
+            .update({ is_online: true })
+            .eq('user_id', user.id);
+        }
       }
 
       // Redirect to dashboard on success
@@ -60,7 +86,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-neutral rounded-lg shadow-xl p-8">
           <h1 className="text-3xl font-heading font-bold text-primary mb-2 text-center">
-            Impero Sport
+            Padel Connect
           </h1>
           <p className="text-gray-600 text-center mb-8">Welcome back! Please log in to continue.</p>
 
