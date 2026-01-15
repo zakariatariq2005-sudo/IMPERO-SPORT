@@ -1,0 +1,2320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clay club | Tennis Club</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --charcoal: #1a1a1a;
+            --near-black: #0f0f0f;
+            --clay-red: #A0522D;
+            --deep-clay: #7A3A1F;
+            --sand: #F5F1E8;
+            --warm-white: #FAF8F3;
+            --olive: #556B2F;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--near-black);
+            color: var(--sand);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Clay Texture */
+        .clay-texture {
+            position: relative;
+        }
+
+        .clay-texture::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(139, 69, 19, 0.03) 0px, transparent 1px, transparent 2px, rgba(139, 69, 19, 0.03) 3px),
+                repeating-linear-gradient(90deg, rgba(139, 69, 19, 0.03) 0px, transparent 1px, transparent 2px, rgba(139, 69, 19, 0.03) 3px);
+            pointer-events: none;
+            opacity: 0.08;
+            mix-blend-mode: multiply;
+        }
+
+        .clay-overlay {
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(139, 69, 19, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(160, 82, 45, 0.05) 0%, transparent 50%);
+            mix-blend-mode: multiply;
+        }
+
+        .angled-cut {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4vw), 0 100%);
+        }
+
+        .angled-cut-reverse {
+            clip-path: polygon(0 4vw, 100% 0, 100% 100%, 0 100%);
+        }
+
+        .club-stamp {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 600;
+            color: rgba(245, 241, 232, 0.6);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(122, 58, 31, 0.95);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        nav.scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--sand);
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(245, 241, 232, 0.8);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--sand);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--clay-red);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-ctas {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-nav {
+            padding: 0.625rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-nav-outline {
+            border: 1px solid rgba(245, 241, 232, 0.3);
+            color: var(--sand);
+        }
+
+        .btn-nav-outline:hover {
+            border-color: var(--clay-red);
+            color: var(--clay-red);
+        }
+
+        .btn-nav-primary {
+            background: var(--clay-red);
+            color: var(--sand);
+        }
+
+        .btn-nav-primary:hover {
+            background: var(--deep-clay);
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('/images/hero-clay.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 1;
+        }
+
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 3rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 9rem);
+            font-weight: 900;
+            color: var(--sand);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero p {
+            font-size: clamp(1.25rem, 2vw, 2rem);
+            color: rgba(245, 241, 232, 0.8);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            font-weight: 300;
+            line-height: 1.7;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--clay-red);
+            color: #FAF7F2;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--deep-clay);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(245, 241, 232, 0.25);
+            color: var(--sand);
+            background: transparent;
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(245, 241, 232, 0.5);
+            background: rgba(245, 241, 232, 0.05);
+        }
+
+        .btn-secondary:active {
+            background: rgba(245, 241, 232, 0.08);
+        }
+
+        /* Override general button styles for membership cards - higher specificity */
+        .membership-card .btn.btn-primary,
+        .membership-card .btn.btn-secondary {
+            padding: 0.875rem 1.5rem !important;
+            font-size: 0.8125rem !important;
+            font-weight: 500 !important;
+            letter-spacing: 0.025em !important;
+            border-radius: 6px !important;
+            transition: background 0.16s ease-out, border-color 0.16s ease-out, transform 0.1s ease-out !important;
+            min-height: 48px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .membership-card .btn.btn-primary {
+            padding: 1rem 1.5rem !important;
+            font-size: 0.875rem !important;
+            font-weight: 600 !important;
+        }
+
+        .trust-chips {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            color: rgba(245, 241, 232, 0.6);
+            animation: fadeIn 0.8s ease-out 0.8s both;
+        }
+
+        .trust-chips span {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(245, 241, 232, 0.2);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            animation: fadeIn 1s ease-out 1.2s both;
+        }
+
+        .scroll-indicator div {
+            width: 24px;
+            height: 40px;
+            border: 2px solid rgba(245, 241, 232, 0.3);
+            border-radius: 20px;
+            position: relative;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator div::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: rgba(245, 241, 232, 0.5);
+            border-radius: 2px;
+            animation: scrollDown 2s infinite;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        @keyframes scrollDown {
+            0%, 20% { transform: translateX(-50%) translateY(0); opacity: 1; }
+            50% { transform: translateX(-50%) translateY(12px); opacity: 0.5; }
+            100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        /* Sections */
+        section {
+            padding: 8rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header .club-stamp {
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 6rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+            color: rgba(245, 241, 232, 0.7);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem;
+        }
+
+        /* Credibility Strip */
+        .credibility-strip {
+            background: var(--charcoal);
+            border-top: 1px solid rgba(245, 241, 232, 0.1);
+            border-bottom: 1px solid rgba(245, 241, 232, 0.1);
+            padding: 1.5rem 0;
+        }
+
+        .credibility-strip .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem 4rem;
+        }
+
+        .credibility-strip span {
+            font-size: 0.875rem;
+            color: rgba(245, 241, 232, 0.7);
+            font-weight: 500;
+        }
+
+        /* Red Clay Code */
+        .red-clay-code {
+            background: var(--charcoal);
+        }
+
+        .red-clay-code .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .red-clay-visual {
+            height: 600px;
+            position: relative;
+            background: linear-gradient(to bottom right, rgba(160, 82, 45, 0.2), rgba(122, 58, 31, 0.2));
+        }
+
+        .red-clay-visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1622279457488736-62f8f24c2a65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.4;
+            mix-blend-mode: overlay;
+        }
+
+        .red-clay-visual .info-box {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-box-content {
+            background: rgba(26, 26, 26, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 241, 232, 0.1);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .info-box-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--sand);
+            margin-bottom: 1rem;
+        }
+
+        .info-box-content .benefit-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            font-size: 0.875rem;
+            color: rgba(245, 241, 232, 0.8);
+            border-bottom: 1px solid rgba(245, 241, 232, 0.1);
+        }
+
+        .red-clay-content h2 {
+            font-size: clamp(3rem, 5vw, 6rem);
+            font-weight: 900;
+            color: var(--sand);
+            margin-bottom: 1.5rem;
+        }
+
+        .red-clay-content p {
+            font-size: 1.125rem;
+            color: rgba(245, 241, 232, 0.7);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .principles-list {
+            list-style: none;
+        }
+
+        .principles-list li {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            color: rgba(245, 241, 232, 0.9);
+            font-weight: 500;
+        }
+
+        .principles-list li::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--clay-red);
+            margin-top: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        /* About Us */
+        .about-us {
+            background: var(--near-black);
+            padding: 8rem 0;
+        }
+
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-content p {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: rgba(245, 241, 232, 0.8);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Facilities */
+        .facilities {
+            background: var(--warm-white);
+            color: var(--charcoal);
+            padding: 5rem 0;
+        }
+
+        .facilities .section-header .club-stamp {
+            color: rgba(26, 26, 26, 0.6);
+        }
+
+        .facilities .section-header h2 {
+            color: var(--charcoal);
+        }
+
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .facility-card {
+            position: relative;
+            overflow: hidden;
+            background: var(--charcoal);
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .facility-card.large {
+            grid-column: span 2;
+            min-height: 320px;
+        }
+
+        .facility-card.medium {
+            grid-column: span 1;
+        }
+
+        .facility-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 1;
+            transition: opacity 0.5s;
+        }
+
+        .facility-card:hover::before {
+            opacity: 1;
+        }
+
+        .facility-card:nth-child(1)::before {
+            background-image: url('/images/red-clay-courts.jpg');
+        }
+
+        .facility-card:nth-child(2)::before {
+            background-image: url('/images/grass-courts.jpg');
+        }
+
+        .facility-card:nth-child(3)::before {
+            background-image: url('/images/jogging-track.jpg');
+        }
+
+        .facility-card:nth-child(4)::before {
+            background-image: url('/images/locker-rooms.jpg');
+        }
+
+        .facility-card:nth-child(5)::before {
+            background-image: url('/images/cold-plunge.jpg');
+        }
+
+        .facility-card:nth-child(6)::before {
+            background-image: url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+        }
+
+
+        .facility-card-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .facility-card h3 {
+            font-size: clamp(1.125rem, 1.4vw, 1.375rem);
+            font-weight: 700;
+            color: var(--sand);
+            margin-bottom: 0.5rem;
+        }
+
+        .facility-card p {
+            color: rgba(245, 241, 232, 0.8);
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        /* Courts Section */
+        .courts-section {
+            background: var(--charcoal);
+        }
+
+        .courts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .court-card {
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .court-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.7s;
+        }
+
+        .court-card:hover::before {
+            transform: scale(1.1);
+        }
+
+        .court-card:nth-child(1)::before {
+            background-image: url('/images/red-clay-courts.jpg');
+        }
+
+        .court-card:nth-child(2)::before {
+            background-image: url('/images/grass-courts.jpg');
+        }
+
+
+        .court-card-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 3rem;
+            z-index: 10;
+        }
+
+        .court-card h3 {
+            font-size: clamp(2.5rem, 4vw, 5rem);
+            font-weight: 900;
+            color: var(--sand);
+            margin-bottom: 1.5rem;
+        }
+
+        .court-attributes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .court-attribute {
+            padding: 0.5rem 1rem;
+            background: rgba(160, 82, 45, 0.3);
+            border: 1px solid rgba(160, 82, 45, 0.5);
+            color: var(--sand);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .court-card p {
+            color: rgba(245, 241, 232, 0.9);
+            font-size: 1.125rem;
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        /* Coaching */
+        .coaching {
+            background: var(--warm-white);
+            color: var(--charcoal);
+        }
+
+        .coaching .section-header .club-stamp {
+            color: rgba(26, 26, 26, 0.6);
+        }
+
+        .coaching .section-header h2 {
+            color: var(--charcoal);
+        }
+
+        .programmes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .programme-card {
+            background: var(--charcoal);
+            border: 1px solid rgba(245, 241, 232, 0.1);
+            padding: 2.5rem;
+            transition: border-color 0.3s;
+        }
+
+        .programme-card:hover {
+            border-color: rgba(160, 82, 45, 0.5);
+        }
+
+        .programme-card .club-stamp {
+            color: var(--clay-red);
+            margin-bottom: 1rem;
+        }
+
+        .programme-card h3 {
+            font-size: clamp(1.5rem, 2vw, 2rem);
+            font-weight: 700;
+            color: var(--sand);
+            margin-bottom: 1rem;
+        }
+
+        .programme-card .focus,
+        .programme-card .outcome {
+            margin-bottom: 1rem;
+        }
+
+        .programme-card .focus-label,
+        .programme-card .outcome-label {
+            font-size: 0.875rem;
+            color: rgba(245, 241, 232, 0.6);
+            margin-bottom: 0.5rem;
+        }
+
+        .programme-card .focus-text,
+        .programme-card .outcome-text {
+            color: rgba(245, 241, 232, 0.9);
+        }
+
+        .programme-card .outcome-text {
+            font-weight: 500;
+        }
+
+        /* Train Recover */
+        .train-recover {
+            background: var(--charcoal);
+        }
+
+        .cycle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        .cycle-item {
+            background: var(--charcoal);
+            border: 1px solid rgba(245, 241, 232, 0.1);
+            padding: 2rem;
+            transition: border-color 0.3s;
+            position: relative;
+        }
+
+        .cycle-item:hover {
+            border-color: rgba(160, 82, 45, 0.5);
+        }
+
+        .cycle-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--clay-red);
+            opacity: 0.5;
+            margin-bottom: 1rem;
+        }
+
+        .cycle-item h3 {
+            font-size: clamp(1.25rem, 1.5vw, 1.5rem);
+            font-weight: 700;
+            color: var(--sand);
+            margin-bottom: 0.75rem;
+        }
+
+        .cycle-item p {
+            color: rgba(245, 241, 232, 0.7);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* Membership */
+        .membership {
+            background: var(--warm-white);
+            color: var(--charcoal);
+        }
+
+        .membership .section-header .club-stamp {
+            color: rgba(26, 26, 26, 0.6);
+        }
+
+        .membership .section-header h2 {
+            color: var(--charcoal);
+        }
+
+        .membership-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .membership-card {
+            background: var(--charcoal);
+            border: 2px solid rgba(245, 241, 232, 0.1);
+            padding: 2rem;
+            position: relative;
+            transition: border-color 0.3s;
+        }
+
+        .membership-card:hover {
+            border-color: rgba(160, 82, 45, 0.5);
+        }
+
+        .membership-card.featured {
+            border-color: var(--clay-red);
+        }
+
+        .membership-card .badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--clay-red);
+            color: var(--sand);
+            padding: 0.25rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .membership-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--sand);
+            margin-bottom: 0.5rem;
+        }
+
+        .membership-card .price {
+            font-size: 1rem;
+            color: var(--clay-red);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .membership-card .plan-description {
+            font-size: 0.875rem;
+            color: rgba(245, 241, 232, 0.6);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .membership-card .plan-outcome {
+            font-size: 0.875rem;
+            color: rgba(245, 241, 232, 0.7);
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .membership-card .features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .membership-card .features li {
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: rgba(245, 241, 232, 0.8);
+            font-size: 0.875rem;
+        }
+
+        .membership-card .features li::before {
+            content: '—';
+            color: var(--clay-red);
+            margin-top: 0.125rem;
+        }
+
+        /* Membership Buttons - Premium Refined Style */
+        .membership-card .btn {
+            width: 100%;
+            text-align: center;
+            padding: 0.875rem 1.5rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            letter-spacing: 0.025em;
+            border-radius: 6px;
+            transition: background 0.16s ease-out, border-color 0.16s ease-out, transform 0.1s ease-out;
+            cursor: pointer;
+            position: relative;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Secondary button in membership cards (View plan details style) */
+        .membership-card .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(245, 241, 232, 0.2);
+            color: rgba(245, 241, 232, 0.85);
+        }
+
+        .membership-card .btn-secondary:hover {
+            border-color: rgba(245, 241, 232, 0.4);
+            background: rgba(245, 241, 232, 0.04);
+            color: var(--sand);
+        }
+
+        .membership-card .btn-secondary:active {
+            background: rgba(245, 241, 232, 0.08);
+            transform: translateY(1px);
+        }
+
+        /* Primary button in membership cards (Apply now style) */
+        .membership-card .btn-primary {
+            background: var(--clay-red);
+            border: none;
+            color: #FAF7F2;
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .membership-card .btn-primary:hover {
+            background: var(--deep-clay);
+        }
+
+        .membership-card .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        /* Mobile touch enhancements */
+        @media (hover: none) and (pointer: coarse) {
+            .membership-card .btn {
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            .membership-card .btn::before {
+                content: '';
+                position: absolute;
+                inset: -8px;
+                background: transparent;
+            }
+
+            .membership-card .btn-secondary:active {
+                background: rgba(245, 241, 232, 0.1);
+            }
+
+            .membership-card .btn-primary:active {
+                background: var(--deep-clay);
+            }
+        }
+
+        /* Respect reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .membership-card .btn {
+                transition: none;
+            }
+        }
+
+        /* Booking */
+        .booking {
+            background: var(--charcoal);
+        }
+
+        .booking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .booking-card {
+            background: var(--clay-red);
+            color: var(--sand);
+            padding: 2rem;
+            text-align: center;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+
+        .booking-card:hover {
+            background: var(--deep-clay);
+        }
+
+        .booking-card.outline {
+            background: transparent;
+            border: 2px solid rgba(245, 241, 232, 0.3);
+        }
+
+        .booking-card.outline:hover {
+            border-color: var(--clay-red);
+            color: var(--clay-red);
+        }
+
+        .booking-card .icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .booking-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .booking-card p {
+            font-size: 0.875rem;
+            color: rgba(245, 241, 232, 0.8);
+        }
+
+        /* Contact Form */
+        .booking-content {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .contact-form {
+            background: rgba(245, 241, 232, 0.05);
+            border: 1px solid rgba(245, 241, 232, 0.1);
+            padding: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--sand);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(245, 241, 232, 0.05);
+            border: 1px solid rgba(245, 241, 232, 0.2);
+            color: var(--sand);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s, background 0.3s;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(245, 241, 232, 0.4);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--clay-red);
+            background: rgba(245, 241, 232, 0.08);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .form-status {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .form-status.success {
+            color: #4ade80;
+        }
+
+        .form-status.error {
+            color: #f87171;
+        }
+
+        .booking-sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .whatsapp-card {
+            background: rgba(245, 241, 232, 0.05);
+            border: 1px solid rgba(245, 241, 232, 0.1);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .whatsapp-icon {
+            color: #25D366;
+            margin-bottom: 1rem;
+            display: inline-block;
+            padding: 1rem;
+            background: rgba(37, 211, 102, 0.1);
+            border-radius: 50%;
+        }
+
+        .whatsapp-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--sand);
+            margin-bottom: 0.75rem;
+        }
+
+        .whatsapp-card p {
+            color: rgba(245, 241, 232, 0.7);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: #25D366;
+            color: white;
+            padding: 0.875rem 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+        }
+        
+        .whatsapp-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .booking-content {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-sidebar {
+                position: static;
+            }
+        }
+
+        /* Gallery */
+        .gallery {
+            background: var(--warm-white);
+        }
+
+        .gallery .section-header .club-stamp {
+            color: rgba(26, 26, 26, 0.6);
+        }
+
+        .gallery .section-header h2 {
+            color: var(--charcoal);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(26, 26, 26, 0.8), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        .gallery-item .label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            color: var(--sand);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            z-index: 10;
+        }
+
+        .gallery-item:hover .label {
+            transform: translateY(0);
+        }
+
+        /* Location */
+        .location {
+            background: var(--charcoal);
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .location-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--sand);
+            margin-bottom: 1rem;
+        }
+
+        .location-info > div {
+            margin-bottom: 2rem;
+        }
+
+        .location-info p {
+            color: rgba(245, 241, 232, 0.8);
+            line-height: 1.8;
+        }
+
+        .location-map {
+            height: 500px;
+            background: var(--charcoal);
+            border: 1px solid rgba(245, 241, 232, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(245, 241, 232, 0.4);
+        }
+
+        /* FAQ */
+        .faq {
+            background: var(--warm-white);
+            color: var(--charcoal);
+        }
+
+        .faq .section-header .club-stamp {
+            color: rgba(26, 26, 26, 0.6);
+        }
+
+        .faq .section-header h2 {
+            color: var(--charcoal);
+        }
+
+        .faq-list {
+            list-style: none;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem 0;
+            text-align: left;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        .faq-question:hover {
+            color: var(--clay-red);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s, padding 0.3s;
+            color: rgba(26, 26, 26, 0.7);
+            line-height: 1.8;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+            padding-bottom: 1.5rem;
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            color: rgba(26, 26, 26, 0.4);
+            transition: transform 0.3s;
+        }
+
+        .faq-item.open .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background: var(--charcoal);
+        }
+
+        .final-cta h2 {
+            font-size: clamp(3rem, 6vw, 7rem);
+            font-weight: 900;
+            color: var(--sand);
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.1;
+        }
+
+        .final-cta .ctas {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--sand);
+            transition: all 0.3s;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            background: var(--charcoal);
+            border-top: 1px solid rgba(245, 241, 232, 0.1);
+            padding: 2rem;
+            z-index: 999;
+        }
+
+        .mobile-nav.active {
+            display: block;
+        }
+
+        .mobile-nav a {
+            display: block;
+            padding: 1rem 0;
+            color: var(--sand);
+            text-decoration: none;
+            font-size: 1.125rem;
+            border-bottom: 1px solid rgba(245, 241, 232, 0.1);
+        }
+
+        .mobile-nav .mobile-ctas {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-nav .mobile-ctas a {
+            border: none;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .mobile-nav .mobile-ctas .btn-primary {
+            background: var(--clay-red);
+        }
+
+        .mobile-nav .mobile-ctas .btn-secondary {
+            border: 1px solid rgba(245, 241, 232, 0.3);
+        }
+
+        /* Responsive - Tablet */
+        @media (max-width: 1024px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-ctas {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .red-clay-code .container {
+                grid-template-columns: 1fr;
+            }
+
+            .red-clay-visual {
+                height: 400px;
+            }
+
+            .facility-card.large,
+            .facility-card.medium {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+
+            .location-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-content {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: clamp(2rem, 4vw, 4rem);
+            }
+        }
+
+        /* Responsive - Mobile */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1.25rem;
+            }
+
+            section {
+                padding: 4rem 0;
+            }
+
+            .nav-container {
+                padding: 0 1.25rem;
+            }
+
+            /* Hero */
+            .hero h1 {
+                font-size: 2.5rem;
+                line-height: 1.15;
+            }
+
+            .hero p {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .hero-ctas {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-ctas .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .scroll-indicator {
+                display: none;
+            }
+
+            /* Credibility Strip */
+            .credibility-strip .container {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            /* Red Clay Code */
+            .red-clay-visual {
+                height: 300px;
+            }
+
+            .red-clay-content h2 {
+                font-size: 2.5rem;
+            }
+
+            .principles-list li {
+                font-size: 1rem;
+            }
+
+            /* Facilities */
+            .facilities {
+                padding: 3.5rem 0;
+            }
+
+            .facilities-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.875rem;
+            }
+
+            .facility-card {
+                min-height: 220px;
+                padding: 1.25rem;
+            }
+            
+            .facility-card.large {
+                min-height: 240px;
+            }
+
+            .facility-card h3 {
+                font-size: 1.125rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .facility-card p {
+                font-size: 0.8125rem;
+                line-height: 1.4;
+            }
+
+            /* Courts */
+            .courts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .court-card {
+                height: 450px;
+            }
+
+            .court-card h3 {
+                font-size: 2.5rem;
+            }
+
+            .court-card-content {
+                padding: 2rem;
+            }
+
+            /* Coaching */
+            .programmes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .programme-card {
+                padding: 1.5rem;
+            }
+
+            /* Train Recover */
+            .cycle-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cycle-item {
+                padding: 1.5rem;
+            }
+
+            /* Membership */
+            .membership-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .membership-card {
+                padding: 1.5rem;
+            }
+
+            .membership-card.featured {
+                transform: scale(1);
+            }
+
+            /* Booking */
+            .booking-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .contact-form {
+                padding: 1.5rem;
+            }
+
+            .whatsapp-card {
+                padding: 1.5rem;
+            }
+
+            /* Gallery */
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+
+            /* Location */
+            .location-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .location-map {
+                height: 300px;
+            }
+
+            /* FAQ */
+            .faq-question {
+                font-size: 1rem;
+                padding: 1.25rem 0;
+            }
+
+            /* Final CTA */
+            .final-cta h2 {
+                font-size: 2.5rem;
+            }
+
+            .final-cta .ctas {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .final-cta .ctas .btn {
+                width: 100%;
+            }
+        }
+
+        /* Responsive - Small Mobile */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.75rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-box-content {
+                padding: 1.25rem;
+            }
+
+            .info-box-content h3 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">Clay club</div><!-- Updated -->
+            <ul class="nav-links">
+                <li><a href="#facilities">Facilities</a></li>
+                <li><a href="#coaching">Coaching</a></li>
+                <li><a href="#membership">Membership</a></li>
+                <li><a href="#location">Location</a></li>
+            </ul>
+            <div class="nav-ctas">
+                <a href="#booking" class="btn-nav btn-nav-outline">Book Tour</a>
+                <a href="#booking" class="btn-nav btn-nav-primary">Contact Us</a>
+            </div>
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="#facilities" class="mobile-nav-link">Facilities</a>
+        <a href="#coaching" class="mobile-nav-link">Coaching</a>
+        <a href="#membership" class="mobile-nav-link">Membership</a>
+        <a href="#location" class="mobile-nav-link">Location</a>
+        <div class="mobile-ctas">
+            <a href="#booking" class="btn-secondary">Book Tour</a>
+            <a href="#booking" class="btn-primary">Contact Us</a>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1>Built on red clay.</h1>
+            <p>Elite courts, professional coaching, recovery, and a performance-driven tennis community.</p>
+        </div>
+    </section>
+
+    <!-- About Us -->
+    <section id="about" class="about-us">
+        <div class="container">
+            <div class="section-header">
+                <span class="club-stamp">ABOUT US</span>
+                <h2>Our Philosophy</h2>
+            </div>
+            <div class="about-content">
+                <p>Clay club is dedicated to providing world-class tennis training on premium red clay courts. We combine elite coaching, state-of-the-art facilities, and a commitment to excellence to help players reach their full potential.</p>
+                <p>Our approach integrates performance training with recovery, creating a holistic environment where athletes can thrive both on and off the court.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Facilities -->
+    <section id="facilities" class="facilities angled-cut">
+        <div class="container">
+            <div class="section-header">
+                <span class="club-stamp">FACILITIES</span>
+                <h2>Performance Infrastructure</h2>
+            </div>
+            <div class="facilities-grid">
+                <div class="facility-card large">
+                    <div class="facility-card-content">
+                        <h3>2 Clay Courts</h3>
+                    </div>
+                </div>
+                <div class="facility-card medium">
+                    <div class="facility-card-content">
+                        <h3>2 Grass Courts</h3>
+                    </div>
+                </div>
+                <div class="facility-card medium">
+                    <div class="facility-card-content">
+                        <h3>250 Meter Jogging Track</h3>
+                    </div>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-card-content">
+                        <h3>Athlete Locker Rooms</h3>
+                    </div>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-card-content">
+                        <h3>Cold Plunge</h3>
+                    </div>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-card-content">
+                        <h3>Stretch Coach</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Train Recover -->
+    <section class="train-recover clay-texture">
+        <div class="container">
+            <div class="section-header">
+                <span class="club-stamp">PERFORMANCE SYSTEM</span>
+                <h2>Train + Recover</h2>
+                <p>A performance ecosystem. Not isolated sessions. Training flows into recovery. Recovery enables training.</p>
+            </div>
+            <div class="cycle-grid">
+                <div class="cycle-item">
+                    <div class="cycle-number">01</div>
+                    <h3>Train on Court</h3>
+                    <p>Performance-focused sessions on red clay and grass.</p>
+                </div>
+                <div class="cycle-item">
+                    <div class="cycle-number">02</div>
+                    <h3>Guided Stretching</h3>
+                    <p>Movement preparation and recovery protocols.</p>
+                </div>
+                <div class="cycle-item">
+                    <div class="cycle-number">03</div>
+                    <h3>Cold Plunge Recovery</h3>
+                    <p>Athlete-grade muscle regeneration.</p>
+                </div>
+                <div class="cycle-item">
+                    <div class="cycle-number">04</div>
+                    <h3>Athlete Club Room Reset</h3>
+                    <p>Preparation, analysis, and recovery space.</p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 4rem; color: rgba(245, 241, 232, 0.6); font-style: italic; font-size: 1.125rem;">
+                The loop repeats. Performance compounds.
+            </p>
+        </div>
+    </section>
+
+    <!-- Membership -->
+    <section id="membership" class="membership angled-cut">
+        <div class="container">
+            <div class="section-header">
+                <span class="club-stamp">MEMBERSHIP</span>
+                <h2>Membership Plans</h2>
+            </div>
+            <div class="membership-grid">
+                <div class="membership-card">
+                    <h3>Young Adults</h3>
+                    <div class="price">Rs. 12,000 / month</div>
+                    <p class="plan-description">Ages 18 & under</p>
+                    <button class="btn btn-secondary view-plan-btn">View plan details</button>
+                    <div class="plan-details" style="display: none;">
+                        <ul class="features">
+                            <li>30 Hours Court Time</li>
+                            <li>Group Coaching (4 Days/Week)</li>
+                            <li>3 Private Sessions</li>
+                            <li>3 Stretch / Physio Sessions</li>
+                            <li>Jogging Track Access</li>
+                            <li>Club & Events Access</li>
+                        </ul>
+                        <a href="#booking" class="btn btn-primary">Apply now</a>
+                    </div>
+                </div>
+                <div class="membership-card featured">
+                    <div class="badge">Most Popular</div>
+                    <h3>Adults</h3>
+                    <div class="price">Rs. 20,000 / month</div>
+                    <p class="plan-description">Ages 18+</p>
+                    <button class="btn btn-secondary view-plan-btn">View plan details</button>
+                    <div class="plan-details" style="display: none;">
+                        <ul class="features">
+                            <li>30 Hours Court Time</li>
+                            <li>Group Coaching (4 Days/Week)</li>
+                            <li>3 Private Sessions</li>
+                            <li>3 Stretch / Physio Sessions</li>
+                            <li>Jogging Track Access</li>
+                            <li>Club & Events Access</li>
+                            <li>Cold Plunge Access</li>
+                        </ul>
+                        <a href="#booking" class="btn btn-primary">Apply now</a>
+                    </div>
+                </div>
+                <div class="membership-card">
+                    <h3>Seniors</h3>
+                    <div class="price">Rs. 15,000 / month</div>
+                    <p class="plan-description">Ages 50+</p>
+                    <button class="btn btn-secondary view-plan-btn">View plan details</button>
+                    <div class="plan-details" style="display: none;">
+                        <ul class="features">
+                            <li>30 Hours Court Time</li>
+                            <li>10 Coaching Sessions</li>
+                            <li>10 Physio / Stretch Sessions</li>
+                            <li>Senior Fitness Programs</li>
+                            <li>Senior Tennis Programs</li>
+                            <li>Jogging Track Access</li>
+                            <li>Club Room Access</li>
+                            <li>Cold Plunge Access</li>
+                        </ul>
+                        <a href="#booking" class="btn btn-primary">Apply now</a>
+                    </div>
+                </div>
+                <div class="membership-card">
+                    <h3>Families</h3>
+                    <div class="price">Rs. 35,000 / month</div>
+                    <p class="plan-description">Family of 3–5</p>
+                    <button class="btn btn-secondary view-plan-btn">View plan details</button>
+                    <div class="plan-details" style="display: none;">
+                        <ul class="features">
+                            <li>30 Hours Court Time</li>
+                            <li>3 Private Sessions</li>
+                            <li>3 Stretch / Physio Sessions</li>
+                            <li>Jogging Track Access</li>
+                            <li>Club Room Access</li>
+                            <li>Cold Plunge Access</li>
+                        </ul>
+                        <a href="#booking" class="btn btn-primary">Apply now</a>
+                    </div>
+                </div>
+                <div class="membership-card">
+                    <h3>Tennis Star Program</h3>
+                    <div class="price">Rs. 25,000 / month</div>
+                    <p class="plan-description">6-Month Professional Program</p>
+                    <button class="btn btn-secondary view-plan-btn">View plan details</button>
+                    <div class="plan-details" style="display: none;">
+                        <ul class="features">
+                            <li>1-on-1 Elite Coaching</li>
+                            <li>4 Training Days / Week</li>
+                            <li>Weekly Progress Updates</li>
+                            <li>Structured Fitness Program</li>
+                            <li>Physio & Recovery Support</li>
+                            <li>Sponsorship Opportunities</li>
+                            <li>Club & Recovery Access</li>
+                        </ul>
+                        <a href="#booking" class="btn btn-primary">Apply now</a>
+                    </div>
+                </div>
+                <div class="membership-card">
+                    <h3>Runners</h3>
+                    <div class="price">Rs. 5,000 / month</div>
+                    <p class="plan-description">Movement & Recovery Access</p>
+                    <button class="btn btn-secondary view-plan-btn">View plan details</button>
+                    <div class="plan-details" style="display: none;">
+                        <ul class="features">
+                            <li>24/7 250m Running Track</li>
+                            <li>Stretch Coach Support</li>
+                            <li>Club Room Access</li>
+                        </ul>
+                        <a href="#booking" class="btn btn-primary">Apply now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking -->
+    <section id="booking" class="booking">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get in Touch</h2>
+                <p>Schedule a visit or send us a message. We respond within 24 hours.</p>
+            </div>
+            <div class="booking-content">
+                <form id="contact-form" class="contact-form">
+                    <div class="form-group">
+                        <label for="time">Preferred Time</label>
+                        <input type="text" id="time" name="Time" placeholder="e.g. Weekday mornings, Saturday 2pm" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="Name" placeholder="Your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="Email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="Message" rows="4" placeholder="Tell us what you're interested in..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-submit">Send Message</button>
+                    <p class="form-status" id="form-status"></p>
+                </form>
+                <div class="booking-sidebar">
+                    <div class="whatsapp-card">
+                        <div class="whatsapp-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
+                        </div>
+                        <h3>Prefer WhatsApp?</h3>
+                        <p>Get a faster response via WhatsApp. We're online daily.</p>
+                        <a href="https://wa.me/923001234567" target="_blank" class="whatsapp-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
+                            Chat on WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location -->
+    <section id="location" class="location">
+        <div class="container">
+            <div class="section-header">
+                <span class="club-stamp">LOCATION</span>
+                <h2>Location & Access</h2>
+            </div>
+            <div class="location-grid">
+                <div class="location-info">
+                    <div>
+                        <h3>Address</h3>
+                        <p>Clay club<br>Multan, Punjab, Pakistan</p>
+                    </div>
+                    <div>
+                        <h3>Parking</h3>
+                        <p>Ample parking available on-site. Reserved spaces for members.</p>
+                    </div>
+                    <div>
+                        <h3>Hours</h3>
+                        <p>Monday - Sunday: 6:00 AM - 10:00 PM<br>Member access 24/7 with key card</p>
+                    </div>
+                    <div>
+                        <h3>Landmarks</h3>
+                        <p>Near Multan Cricket Stadium</p>
+                    </div>
+                </div>
+                <div class="location-map">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d220698.28400558847!2d71.35864895!3d30.1830574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x393b315b18e7a89b%3A0x6dea13332cd801bc!2sMultan%2C%20Punjab%2C%20Pakistan!5e0!3m2!1sen!2s!4v1703876400000!5m2!1sen!2s" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="club-stamp">FAQ</span>
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <ul class="faq-list">
+                <li class="faq-item">
+                    <button class="faq-question">
+                        What are the membership rules?
+                        <span class="faq-toggle">↓</span>
+                    </button>
+                    <div class="faq-answer">
+                        Memberships are annual commitments with monthly payment options. Court booking privileges depend on membership tier. All members must follow club etiquette and court maintenance protocols.
+                    </div>
+                </li>
+                <li class="faq-item">
+                    <button class="faq-question">
+                        What are the court booking limits?
+                        <span class="faq-toggle">↓</span>
+                    </button>
+                    <div class="faq-answer">
+                        Individual members can book up to 4 hours per week in advance. Family memberships allow 8 hours per week. Founding members receive priority booking and extended limits.
+                    </div>
+                </li>
+                <li class="faq-item">
+                    <button class="faq-question">
+                        How available is coaching?
+                        <span class="faq-toggle">↓</span>
+                    </button>
+                    <div class="faq-answer">
+                        Coaching availability varies by programme. Private coaching sessions are scheduled based on coach and member availability. Young Adult Programme includes structured weekly sessions.
+                    </div>
+                </li>
+                <li class="faq-item">
+                    <button class="faq-question">
+                        What is the rain policy for clay courts?
+                        <span class="faq-toggle">↓</span>
+                    </button>
+                    <div class="faq-answer">
+                        Clay courts require maintenance after rain. Courts are closed during and immediately after precipitation. Members receive notifications about court availability. Indoor training facilities remain available.
+                    </div>
+                </li>
+                <li class="faq-item">
+                    <button class="faq-question">
+                        Are there shoe requirements?
+                        <span class="faq-toggle">↓</span>
+                    </button>
+                    <div class="faq-answer">
+                        Non-marking tennis shoes are required on all courts. Clay-specific shoes are recommended but not mandatory. Street shoes are prohibited on court surfaces.
+                    </div>
+                </li>
+                <li class="faq-item">
+                    <button class="faq-question">
+                        What are the family plan rules?
+                        <span class="faq-toggle">↓</span>
+                    </button>
+                    <div class="faq-answer">
+                        Family plans cover up to 4 family members. All members must be registered. Junior programme access is included. Guest privileges are shared across the family membership.
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta clay-texture">
+        <div class="container">
+            <h2>Train where champions are built.</h2>
+            <div class="ctas">
+                <a href="#booking" class="btn btn-primary">Book a Tour</a>
+                <a href="#membership" class="btn btn-secondary">View Memberships</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileNav = document.getElementById('mobile-nav');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+                mobileMenuBtn.classList.remove('active');
+            });
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.closest('.faq-item');
+                const isOpen = item.classList.contains('open');
+                
+                // Close all items
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                
+                // Open clicked item if it wasn't open
+                if (!isOpen) {
+                    item.classList.add('open');
+                }
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const targetPosition = target.offsetTop - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Membership Plan Details Toggle
+        const viewPlanBtns = document.querySelectorAll('.view-plan-btn');
+        viewPlanBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const card = btn.closest('.membership-card');
+                const details = card.querySelector('.plan-details');
+                const computedStyle = window.getComputedStyle(details);
+                const isExpanded = computedStyle.display !== 'none';
+                
+                // Close all other cards and show their buttons
+                document.querySelectorAll('.plan-details').forEach(d => {
+                    if (d !== details) {
+                        d.style.display = 'none';
+                        const otherCard = d.closest('.membership-card');
+                        const otherBtn = otherCard.querySelector('.view-plan-btn');
+                        if (otherBtn) {
+                            otherBtn.style.display = 'block';
+                            otherBtn.style.visibility = 'visible';
+                        }
+                    }
+                });
+                
+                // Toggle current card
+                if (isExpanded) {
+                    details.style.display = 'none';
+                    btn.style.display = 'block';
+                    btn.style.visibility = 'visible';
+                } else {
+                    details.style.display = 'block';
+                    btn.style.display = 'none';
+                    btn.style.visibility = 'hidden';
+                }
+            });
+        });
+
+        // Contact Form Submission
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = contactForm.querySelector('.btn-submit');
+            const originalText = submitBtn.textContent;
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            formStatus.textContent = '';
+            formStatus.className = 'form-status';
+
+            // Get form data - field names must match spreadsheet columns exactly
+            const formData = {
+                Time: document.getElementById('time').value,
+                Name: document.getElementById('name').value,
+                Email: document.getElementById('email').value,
+                Message: document.getElementById('message').value
+            };
+
+            try {
+                const response = await fetch('https://sheetdb.io/api/v1/ohj9s93ypo2zu', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: formData })
+                });
+
+                if (response.ok) {
+                    formStatus.textContent = 'Message sent successfully. We will contact you soon.';
+                    formStatus.className = 'form-status success';
+                    contactForm.reset();
+                } else {
+                    throw new Error('Failed to send');
+                }
+            } catch (error) {
+                formStatus.textContent = 'Failed to send message. Please try WhatsApp instead.';
+                formStatus.className = 'form-status error';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+    </script>
+</body>
+</html>
+
